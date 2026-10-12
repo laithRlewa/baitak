@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>بيتك</title>
+  <script>
+    (function () {
+      var base = '/baitak';
+      var path = location.pathname || '/';
+      // Drop links: /baitak/d/<token> -> /baitak/d/?t=<token>
+      var m = path.match(/^(?:\/baitak)?\/d\/([^/?#]+)/);
+      if (m) {
+        location.replace(base + '/d/?t=' + encodeURIComponent(m[1]) + location.hash);
+        return;
+      }
+      // Anything else inside the web app: send to the app shell
+      if (path.indexOf(base + '/app') === 0 || path === '/app' || path.indexOf('/app/') === 0) {
+        location.replace(base + '/app/');
+        return;
+      }
+      location.replace(base + '/');
+    })();
+  </script>
+</head>
+<body></body>
+</html>

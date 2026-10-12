@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#3A8FA0" />
+  <title>طلب إسقاط · بيتك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --brand: #3A8FA0;
+      --brand-soft: #6DB5C6;
+      --ink: #2A3F48;
+      --muted: #8A8078;
+      --bg: #FFF7F0;
+      --hero: #D5EBF1;
+      --panel: #ffffff;
+      --line: #E8DDD2;
+      --danger: #B42318;
+      --ok: #16794C;
+      --brass: #F8B88A;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Cairo, Tahoma, sans-serif;
+      background:
+        radial-gradient(900px 420px at 100% -10%, var(--hero), transparent 60%),
+        var(--bg);
+      color: var(--ink);
+    }
+    .wrap { max-width: 480px; margin: 0 auto; padding: 22px 16px 48px; }
+    .brand {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-bottom: 18px; font-weight: 900;
+    }
+    .mark {
+      width: 42px; height: 42px; border-radius: 14px;
+      background: linear-gradient(160deg, var(--brand-soft), var(--brand));
+      display: grid; place-items: center; color: #fff; font-size: 20px;
+      box-shadow: 0 8px 20px #3A8FA033;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 20px;
+      box-shadow: 0 16px 40px #2A3F4810;
+    }
+    .photo {
+      width: 100%; height: 220px; object-fit: cover; border-radius: 20px;
+      background: #F3E6D8; margin-bottom: 14px; display: none;
+    }
+    h1 { margin: 0 0 6px; font-size: 22px; line-height: 1.35; }
+    .sub { color: var(--muted); font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+    .price { font-size: 26px; font-weight: 900; color: var(--brand); margin-bottom: 6px; }
+    label { display: block; font-weight: 800; font-size: 13px; margin: 12px 0 6px; }
+    input, select {
+      width: 100%; padding: 13px 14px; border: 1px solid var(--line);
+      border-radius: 16px; font: inherit; background: #fff; color: var(--ink);
+    }
+    input:focus, select:focus { outline: 2px solid #6DB5C655; border-color: var(--brand-soft); }
+    .qty {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .qty button {
+      width: 46px; margin: 0; border-radius: 14px; padding: 10px 0;
+      background: #EAF5F8; color: var(--brand); font-size: 20px;
+    }
+    .qty input { text-align: center; font-weight: 900; }
+    button {
+      width: 100%; margin-top: 18px; border: 0; border-radius: 18px;
+      padding: 14px; font: inherit; font-weight: 900; color: #fff;
+      background: linear-gradient(180deg, var(--brand-soft), var(--brand));
+    }
+    button:disabled { opacity: .55; }
+    .msg { margin-top: 12px; font-weight: 800; text-align: center; min-height: 1.4em; }
+    .ok { color: var(--ok); }
+    .err { color: var(--danger); }
+    .done {
+      text-align: center; padding: 18px 8px 8px;
+    }
+    .done b { display: block; font-size: 22px; margin: 10px 0 6px; }
+    .hidden { display: none !important; }
+    .foot { text-align: center; color: var(--muted); font-size: 12px; font-weight: 700; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark">ب</div>
+      <div>بيتك</div>
+    </div>
+    <div class="card">
+      <img id="photo" class="photo" alt="" />
+      <h1 id="title">طلب إسقاط</h1>
+      <div class="sub" id="sub">اكتب تفاصيلك هنا. هذا طلب مستقل من رابط الهبوط.</div>
+      <div class="price" id="price"></div>
+      <form id="form">
+        <label>الاسم</label>
+        <input name="name" autocomplete="name" placeholder="اسم الزبون" required />
+        <label>رقم الهاتف</label>
+        <input name="phone" inputmode="tel" autocomplete="tel" placeholder="07XXXXXXXXX" required />
+        <label>المحافظة</label>
+        <select name="cityCode" required><option value="">جاري التحميل…</option></select>
+        <label>المنطقة</label>
+        <select name="regionCode" required><option value="">اختر المحافظة أولاً</option></select>
+        <label>العنوان</label>
+        <input name="address" placeholder="الحي والشارع والزقاق" required />
+        <label>نقطة قريبة</label>
+        <input name="landmark" placeholder="معلم معروف قريب منك" />
+        <label>العدد</label>
+        <div class="qty">
+          <button type="button" id="minus">−</button>
+          <input name="quantity" type="number" min="1" max="99" value="1" required />
+          <button type="button" id="plus">+</button>
+        </div>
+        <button type="submit" id="send">إرسال الطلب</button>
+        <div class="msg" id="msg"></div>
+      </form>
+      <div id="done" class="done hidden">
+        <div class="mark" style="margin:0 auto 8px">✓</div>
+        <b>تم استلام طلبك</b>
+        <div class="sub" id="doneText"></div>
+      </div>
+    </div>
+    <div class="foot">بعد الموافقة يتواصل معك فريق بيتك لإتمام التوصيل</div>
+  </div>
+  <script>
+    const SB_URL = 'https://inmwdeyaixgvtepsdixe.supabase.co';
+    const SB_KEY = 'sb_publishable_0iILln2-pdm8zSpPAVWbCg_-Rr1ZZpg';
+    function readToken() {
+      const q = new URLSearchParams(location.search).get('t') || '';
+      if (q.trim()) return q.trim();
+      const parts = location.pathname.split('/').filter(Boolean);
+      const last = parts[parts.length - 1] || '';
+      if (last && !/^index\.html?$/i.test(last) && last !== 'd' && last !== 'drop') return last;
+      const i = Math.max(parts.lastIndexOf('d'), parts.lastIndexOf('drop'));
+      return i >= 0 && parts[i + 1] ? parts[i + 1] : '';
+    }
+    const token = readToken();
+    const form = document.getElementById('form');
+    const msg = document.getElementById('msg');
+    const citySel = form.cityCode;
+    const regionSel = form.regionCode;
+    const qty = form.quantity;
+    const cities = [];
+    const regions = [];
+    let backend = 'auto';
+
+    function setMsg(text, ok) {
+      msg.textContent = text || '';
+      msg.className = 'msg ' + (ok ? 'ok' : 'err');
+    }
+    function fillSelect(sel, rows, emptyText) {
+      sel.innerHTML = '<option value="">' + emptyText + '</option>' +
+        rows.map((r) => '<option value="' + escapeHtml(r.id) + '">' + escapeHtml(r.name) + '</option>').join('');
+    }
+    function escapeHtml(v) {
+      return String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    function money(n) {
+      const v = Number(n || 0);
+      return v > 0 ? v.toLocaleString('ar-IQ') + ' د.ع' : '';
+    }
+    function uid(prefix) {
+      return prefix + Date.now().toString(36) + Math.floor(Math.random() * 9999);
+    }
+    function iraqPhone(raw) {
+      const d = String(raw || '').replace(/\D/g, '');
+      if (d.startsWith('964') && d.length >= 12) return '+' + d;
+      if (d.startsWith('0') && d.length === 11) return '+964' + d.slice(1);
+      if (d.startsWith('7') && d.length === 10) return '+964' + d;
+      return String(raw || '').trim();
+    }
+
+    async function nestApi(path, opt) {
+      const res = await fetch('/api/drop-links/public/' + encodeURIComponent(token) + path, Object.assign({
+        headers: { 'Content-Type': 'application/json' },
+      }, opt || {}));
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || 'تعذر الإرسال');
+      return data;
+    }
+
+    async function sb(path, opt) {
+      const headers = Object.assign({
+        apikey: SB_KEY,
+        Authorization: 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json',
+      }, (opt && opt.headers) || {});
+      const res = await fetch(SB_URL + '/rest/v1/' + path, Object.assign({}, opt, { headers }));
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : null;
+      if (!res.ok) throw new Error((data && (data.message || data.hint)) || 'تعذر الوصول لسوبابيس');
+      return data;
+    }
+
+    async function setting(key) {
+      const rows = await sb('shop_settings?key=eq.' + encodeURIComponent(key) + '&select=value');
+      return rows && rows[0] ? String(rows[0].value || '') : '';
+    }
+
+    function dropTokenForProduct(productId) {
+      const clean = String(productId || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+      return (clean.slice(-16) || clean || 'product').padStart(8, '0');
+    }
+    async function dropLinkByToken() {
+      try {
+        const rows = await sb('shop_drop_links?token=eq.' + encodeURIComponent(token) + '&select=*');
+        if (rows && rows[0]) return rows[0];
+      } catch (_) {}
+      const id = await setting('drop_token:' + token);
+      if (id) {
+        const raw = await setting('drop_link:' + id);
+        if (raw) {
+          try { return JSON.parse(raw); } catch (_) {}
+        }
+        return { id: id, token: token, productId: id, isActive: true };
+      }
+      try {
+        const settings = await sb('shop_settings?key=like.drop_link:*&select=value');
+        for (const row of settings || []) {
+          try {
+            const parsed = JSON.parse(row.value || '');
+            if (parsed && String(parsed.token || '').toLowerCase() === String(token).toLowerCase()) return parsed;
+          } catch (_) {}
+        }
+      } catch (_) {}
+      try {
+        const products = await sb('shop_products?select=id,name,sku,barcode&or=(id.eq.' + encodeURIComponent(token) + ',id.ilike.*' + encodeURIComponent(token) + ',sku.ilike.*' + encodeURIComponent(token) + ')');
+        const hit = (products || []).find((p) => dropTokenForProduct(p.id) === String(token).toLowerCase() || dropTokenForProduct(p.sku || '') === String(token).toLowerCase());
+        if (hit) return { id: hit.id, token: token, name: hit.name, productId: hit.id, isActive: true };
+      } catch (_) {}
+      return null;
+    }
+
+    async function productById(id) {
+      const rows = await sb('shop_products?id=eq.' + encodeURIComponent(id) + '&select=*');
+      const product = rows && rows[0] ? rows[0] : {};
+      try {
+        const imgs = await sb('shop_product_images?productId=eq.' + encodeURIComponent(id) + '&select=url,imageUrl,sortOrder&order=sortOrder.asc');
+        const cover = (imgs || []).map((i) => i.url || i.imageUrl).find(Boolean);
+        if (cover && !product.imageUrl) product.imageUrl = cover;
+      } catch (_) {}
+      try {
+        const vars = await sb('shop_product_variants?productId=eq.' + encodeURIComponent(id) + '&select=*');
+        product.variants = vars || [];
+      } catch (_) { product.variants = []; }
+      return product;
+    }
+
+    async function supabasePage() {
+      const link = await dropLinkByToken();
+      if (!link) throw new Error('رابط الإسقاط غير متاح');
+      const product = await productById(link.productId);
+      if (!product || !product.id) throw new Error('رابط الإسقاط غير متاح');
+      const variant = (product.variants || []).find((v) => String(v.id) === String(link.variantId || ''));
+      const name = [product.name, variant && variant.name].filter(Boolean).join(' ');
+      return {
+        token: token,
+        name: name || link.name || 'طلب إسقاط',
+        productName: product.name || '',
+        variantName: variant ? variant.name : null,
+        imageUrl: (variant && variant.imageUrl) || product.imageUrl || '',
+        price: Number((variant && variant.sellPrice) || product.sellPrice || 0),
+        _link: link,
+        _product: product,
+      };
+    }
+
+    const FALLBACK_CITIES = ['بغداد','بابل','كربلاء','النجف','واسط','ديالى','صلاح الدين','الأنبار','نينوى','كركوك','أربيل','السليمانية','دهوك','البصرة','ذي قار','ميسان','المثنى','القادسية'].map((n) => ({ id: n, name: n }));
+    async function supabaseCities() {
+      try {
+        const raw = await setting('drop_cities_cache');
+        const rows = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(rows) && rows.length) return { cities: rows };
+      } catch (_) {}
+      return { cities: FALLBACK_CITIES };
+    }
+
+    async function supabaseRegions(cityId) {
+      const raw = await setting('drop_regions_cache:' + cityId);
+      if (!raw) throw new Error('اختر المحافظة بعد تحديث المناطق من التطبيق');
+      const rows = JSON.parse(raw);
+      return { regions: Array.isArray(rows) ? rows : [] };
+    }
+
+    async function supabaseSubmit(payload, page) {
+      const phone = iraqPhone(payload.phone);
+      if (phone.replace(/\D/g, '').length < 10) throw new Error('أدخل رقم هاتف صحيح');
+      const qtyN = Math.max(1, Math.min(99, Number(payload.quantity || 1)));
+      const price = Number(page.price || 0);
+      const line = price * qtyN;
+      const orderId = uid('d');
+      const orderNo = 'إس-' + String(Date.now()).slice(-8);
+      const last4 = phone.replace(/\D/g, '').slice(-4);
+      const landmark = String(payload.landmark || '').trim();
+      const order = {
+        id: orderId,
+        orderNo: orderNo,
+        status: 'pending',
+        source: 'drop',
+        dropLinkId: page._link.id,
+        customerName: String(payload.name || '').trim() || ('زبون ' + last4),
+        customerPhone: phone,
+        city: payload.city,
+        region: payload.region,
+        cityCode: payload.cityCode,
+        regionCode: payload.regionCode,
+        landmark: landmark || null,
+        address: payload.address,
+        note: landmark ? ('نقطة قريبة: ' + landmark + ' | إسقاط:' + page._link.id) : ('إسقاط:' + page._link.id),
+        subtotal: line,
+        total: line,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      try {
+        await sb('shop_orders', { method: 'POST', body: JSON.stringify(order), headers: { Prefer: 'return=minimal' } });
+      } catch (e) {
+        delete order.dropLinkId; delete order.cityCode; delete order.regionCode; delete order.landmark;
+        await sb('shop_orders', { method: 'POST', body: JSON.stringify(order), headers: { Prefer: 'return=minimal' } });
+      }
+      await sb('shop_order_items', {
+        method: 'POST',
+        headers: { Prefer: 'return=minimal' },
+        body: JSON.stringify({
+          id: uid('i'),
+          orderId: orderId,
+          productId: page._link.productId,
+          name: page.name,
+          quantity: qtyN,
+          unitPrice: price,
+          lineTotal: line,
+        }),
+      });
+      return { ok: true, orderNo: orderNo, message: 'تم استلام طلبك. سنتواصل معك بعد الموافقة.' };
+    }
+
+    let pageData = null;
+
+    async function api(path, opt) {
+      if (backend === 'nest') return nestApi(path, opt);
+      if (path === '') return pageData;
+      if (path === '/cities') return supabaseCities();
+      if (path.startsWith('/regions')) {
+        const cityId = new URLSearchParams(path.split('?')[1] || '').get('cityId') || '';
+        return supabaseRegions(cityId);
+      }
+      if (path === '/orders') {
+        const body = JSON.parse(opt.body);
+        return supabaseSubmit(body, pageData);
+      }
+      throw new Error('مسار غير مدعوم');
+    }
+
+    function renderPage(page) {
+      document.getElementById('title').textContent = page.name || 'طلب إسقاط';
+      document.getElementById('price').textContent = money(page.price);
+      const img = document.getElementById('photo');
+      if (page.imageUrl) {
+        img.src = page.imageUrl;
+        img.style.display = 'block';
+      }
+    }
+
+    async function boot() {
+      if (!token) {
+        setMsg('رابط الإسقاط غير صالح', false);
+        form.querySelector('#send').disabled = true;
+        return;
+      }
+      try {
+        backend = 'supabase';
+        pageData = await supabasePage();
+        renderPage(pageData);
+        const look = await supabaseCities();
+        cities.splice(0, cities.length, ...(look.cities || []));
+        fillSelect(citySel, cities, 'اختر المحافظة');
+      } catch (e) {
+        setMsg(e.message || 'الرابط غير متاح', false);
+        form.querySelector('#send').disabled = true;
+      }
+    }
+
+    citySel.addEventListener('change', async () => {
+      regionSel.innerHTML = '<option value="">جاري التحميل…</option>';
+      regions.splice(0, regions.length);
+      if (!citySel.value) {
+        fillSelect(regionSel, [], 'اختر المحافظة أولاً');
+        return;
+      }
+      try {
+        const look = await api('/regions?cityId=' + encodeURIComponent(citySel.value));
+        regions.splice(0, regions.length, ...(look.regions || []));
+        fillSelect(regionSel, regions, 'اختر المنطقة');
+      } catch (e) {
+        fillSelect(regionSel, [], 'تعذر تحميل المناطق');
+        setMsg(e.message, false);
+      }
+    });
+
+    document.getElementById('minus').onclick = () => {
+      qty.value = String(Math.max(1, Number(qty.value || 1) - 1));
+    };
+    document.getElementById('plus').onclick = () => {
+      qty.value = String(Math.min(99, Number(qty.value || 1) + 1));
+    };
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const city = cities.find((c) => String(c.id) === citySel.value);
+      const region = regions.find((r) => String(r.id) === regionSel.value);
+      if (!city || !region) {
+        setMsg('اختر المحافظة والمنطقة حسب مدن', false);
+        return;
+      }
+      const btn = document.getElementById('send');
+      btn.disabled = true;
+      setMsg('جاري الإرسال…', true);
+      try {
+        const res = await api('/orders', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: form.name.value,
+            phone: form.phone.value,
+            address: form.address.value,
+            landmark: form.landmark.value,
+            quantity: Number(form.quantity.value || 1),
+            city: city.name,
+            cityCode: city.id,
+            region: region.name,
+            regionCode: region.id,
+          }),
+        });
+        form.classList.add('hidden');
+        document.getElementById('done').classList.remove('hidden');
+        document.getElementById('doneText').textContent =
+          (res.message || 'تم استلام الطلب') + (res.orderNo ? ' · ' + res.orderNo : '');
+      } catch (e) {
+        setMsg(e.message || 'تعذر إرسال الطلب', false);
+        btn.disabled = false;
+      }
+    });
+
+    boot();
+  </script>
+</body>
+</html>

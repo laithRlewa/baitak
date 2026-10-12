@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#3A8FA0" />
+  <title>بيتك — تحميل التطبيقات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --brand: #3A8FA0;
+      --brand-soft: #6DB5C6;
+      --ink: #2A3F48;
+      --muted: #8A8078;
+      --bg: #FFF7F0;
+      --hero: #D5EBF1;
+      --panel: #ffffff;
+      --line: #E8DDD2;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Cairo, Tahoma, sans-serif;
+      background:
+        radial-gradient(900px 420px at 100% -10%, var(--hero), transparent 60%),
+        var(--bg);
+      color: var(--ink);
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 28px 16px 56px; }
+    .brand {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin-bottom: 8px; font-weight: 900; font-size: 26px;
+    }
+    .mark {
+      width: 52px; height: 52px; border-radius: 16px;
+      background: linear-gradient(160deg, var(--brand-soft), var(--brand));
+      display: grid; place-items: center; color: #fff; font-size: 26px;
+      box-shadow: 0 8px 20px #3A8FA033;
+    }
+    .tagline { text-align: center; color: var(--muted); font-weight: 700; font-size: 14px; margin-bottom: 26px; }
+    .grid { display: grid; gap: 14px; }
+    @media (min-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .card {
+      display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 22px;
+      padding: 18px; box-shadow: 0 12px 30px #2A3F480d;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 18px 40px #2A3F4818; }
+    .icon {
+      flex: 0 0 48px; width: 48px; height: 48px; border-radius: 14px;
+      display: grid; place-items: center; font-size: 24px;
+      background: #EAF5F8; color: var(--brand);
+    }
+    .card b { display: block; font-size: 16px; }
+    .card span { display: block; color: var(--muted); font-size: 12.5px; font-weight: 700; margin-top: 3px; line-height: 1.6; }
+    .primary {
+      background: linear-gradient(160deg, var(--brand-soft), var(--brand));
+      color: #fff; border: 0;
+    }
+    .primary .icon { background: #ffffff2e; color: #fff; }
+    .primary span { color: #eef9fb; }
+    .full { grid-column: 1 / -1; }
+    .foot { text-align: center; color: var(--muted); font-size: 12px; font-weight: 700; margin-top: 26px; line-height: 1.9; }
+    .foot a { color: var(--brand); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark">ب</div>
+      <div>بيتك</div>
+    </div>
+    <div class="tagline">كل نسخ تطبيقات بيتك — متجر المفروشات ونظام الكاشير — في مكان واحد</div>
+
+    <div class="grid">
+      <a class="card primary full" href="/baitak/app/">
+        <div class="icon">🛋️</div>
+        <div>
+          <b>متجر بيتك — نسخة الويب</b>
+          <span>يفتح مباشرة من المتصفح على الهاتف والحاسوب بدون تثبيت</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://github.com/laithRlewa/baitak/releases/latest/download/Baitak.apk">
+        <div class="icon">🤖</div>
+        <div>
+          <b>تطبيق بيتك — أندرويد</b>
+          <span>ملف APK — نزّله وثبّته على الهاتف مباشرة</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://github.com/laithRlewa/baitak/releases/latest/download/BaitakSetup.exe">
+        <div class="icon">🖥️</div>
+        <div>
+          <b>نظام الكاشير — ويندوز</b>
+          <span>مثبّت بيتك POS لنقاط البيع على الحاسوب</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://github.com/laithRlewa/baitak/releases/latest/download/Baitak-Mac.zip">
+        <div class="icon">🍎</div>
+        <div>
+          <b>نظام الكاشير — ماك</b>
+          <span>حزمة بيتك المحمولة لأجهزة Mac — فك الضغط ثم شغّل تثبيت-بيتك</span>
+        </div>
+      </a>
+
+      <a class="card" href="/baitak/pos/">
+        <div class="icon">🧾</div>
+        <div>
+          <b>واجهة الكاشير — ويب</b>
+          <span>نسخة المتصفح من نظام نقاط البيع — تحتاج عنوان API من الإعدادات</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="foot">
+      روابط التحميل محدثة دائماً لأحدث إصدار ·
+      <a href="https://github.com/laithRlewa/baitak/releases">كل الإصدارات</a>
+    </div>
+  </div>
+</body>
+</html>
